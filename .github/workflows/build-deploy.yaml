@@ -26,3 +26,14 @@ jobs:
         tags: ${{ secrets.DOCKER_HUB_USERNAME }}/sliit-y4-2022:${{ github.sha }}
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag sliit-y4-2022:${{ github.sha }}
+    - name: update config files in k8s
+      run: sed -i.bak 's/{{tag}}/word2/g' k8s/deployment.yaml && rm k8s/*.bak
+    - uses: google-github-actions/setup-gcloud@94337306dda8180d967a56932ceb4ddcf01edae7
+      with:
+        service_account_key: ${{ secrets.KUBE_CONFIG }}
+        project_id: ${{ secrets.PROJECT_ID }}
+    - uses: actions-hub/kubectl@master
+      env:
+        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      with:
+        args: get pods

@@ -134,5 +134,5 @@ status:
     type: Progressing
   observedGeneration: 1
   readyReplicas: 3
-  replicas: 3
+  replicas: 1
   updatedReplicas: 3
